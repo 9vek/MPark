@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, FlatList, Text, View } from 'react-native';
-import { roundToNearestPixel } from 'react-native/Libraries/Utilities/PixelRatio';
+import { StyleSheet, FlatList, Text, View, Dimensions } from 'react-native';
+import MapView from 'react-native-maps';
 
+const styles = StyleSheet.create({
+  map: {
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height / 2,
+  },
+});
 
 export default App = () => {
   const [isLoading, setLoading] = useState(true);
@@ -17,11 +23,17 @@ export default App = () => {
 
   const renderItem = ({ item }) => {
     return (
-      <Text>
-        <Text style={styles.id_tag} className="bg-lime-600 text-white rounded-xl mx-1">{" " + item.id + " "}</Text>
-        <Text className="text-bold text-xl">{item.name}</Text> {"\n"}
-        <Text>{item.address}</Text>
-      </Text>
+      <View className="my-2">
+        <View className="p-1 mr-2 rounded bg-lime-600">
+          <Text className="text-white text-xs"> {item.id}</Text>
+        </View>
+        <View className="ml-2">
+          <Text className="text-bold text-xl">{item.name}</Text>
+        </View>
+        <View>
+          <Text className="text-stone-600">{item.address}</Text>
+        </View>
+      </View>
     )
   }
 
@@ -30,6 +42,9 @@ export default App = () => {
     <View style={{ flex: 1, padding: 24 }}>
       {isLoading ? <Text>Loading...</Text> :
         (<View style={{ flex: 1, flexDirection: 'column', justifyContent: 'space-between' }}>
+          <View>
+            <MapView style={styles.map} />
+          </View>
           <Text style={{ fontSize: 18, color: 'green', textAlign: 'center' }}>{data.title}</Text>
           <Text style={{ fontSize: 14, color: 'green', textAlign: 'center', paddingBottom: 10 }}>Parkings:</Text>
           <FlatList
@@ -43,11 +58,3 @@ export default App = () => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  id_tag: {
-    padding: "2px",
-    marginRight: "10px",
-    borderRadius: "10px"
-  },
-});
